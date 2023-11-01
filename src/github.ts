@@ -476,7 +476,7 @@ export class GitHub {
         message: graphCommit.message,
       };
       const pullRequest = graphCommit.associatedPullRequests.nodes.find(pr => {
-        return pr.mergeCommit && pr.mergeCommit.oid === graphCommit.sha;
+        return pr?.mergeCommit?.oid === graphCommit.sha;
       });
       if (pullRequest) {
         const files = (pullRequest.files?.nodes || []).map(node => node.path);

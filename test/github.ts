@@ -568,6 +568,26 @@ describe('GitHub', () => {
       snapshot(commits!);
       req.done();
     });
+
+    it('handles merged pull requests with null nodes', async () => {
+      const graphql = JSON.parse(
+        readFileSync(
+          resolve(fixturesPath, 'commits-since-null-nodes.json'),
+          'utf8'
+        )
+      );
+      req.post('/graphql').reply(200, {
+        data: graphql,
+      });
+      const generator = github.mergeCommitIterator('main');
+      const commits: Commit[] = [];
+      for await (const commit of generator) {
+        commits.push(commit);
+      }
+      expect(commits).lengthOf(2);
+      snapshot(commits!);
+      req.done();
+    });
   });
 
   describe('getCommitFiles', () => {
